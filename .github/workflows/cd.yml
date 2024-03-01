@@ -1,30 +1,30 @@
-name: Manual Tag Trigger Workflow
+name: Workflow Dispatch Example
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
-  check_release_job:
+  check-release:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Get releases
-        id: releases
+      - name: Set RELEASE_TAG as an environment variable
         run: |
-          releases=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases")
-          echo "::set-output name=releases::$(echo "$releases" | jq -r '.[].tag_name')"
-        
-      - name: Check if tag exists in releases
+          echo "RELEASE_TAG=${{ env.RELEASE_TAG }}" >> $GITHUB_ENV
+      
+      - name: Get release info for ref
+        id: release
         run: |
-          releases="${{ steps.releases.outputs.releases }}"
-          tag="${{ env.GITHUB_REF_NAME }}"
-          
-          if [[ $releases == *"$tag"* ]]; then
-            echo "Tag exists in releases"
-          else
-            echo "Error: Tag '$tag' doesn't have a release associated with it. Please select a tag from the releases."
-            exit 1
-          fi
+          RELEASE_INFO=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_TAG }})
+          RELEASE_TAG=$(echo $RELEASE_INFO | jq -r '.tag_name')
+          echo "::set-output name=tag::$RELEASE_TAG"
+      
+      - name: Compare ref and release
+        if: steps.release.outputs.tag != env.RELEASE_TAG
+        run: |
+          echo "Error: The ref you selected does not have a release associated with it. Please select a ref from the releases."
+          exit 1
+      
+      - name: Continue with the workflow
+        run: |
+          echo "The ref you selected has a release associated with it. Proceeding with the workflow."
