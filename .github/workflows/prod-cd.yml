@@ -1,14 +1,12 @@
-name: Check Release Workflow
+name: Manual Tag Trigger Workflow
+
 on:
   workflow_dispatch
-    # inputs:
-    #   ref_tag:
-    #     description: 'Tag to use for the workflow'
-    #     required: true
 
 jobs:
-  check_release:
+  check_release_job:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
