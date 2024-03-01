@@ -1,6 +1,6 @@
 name: Check Release Workflow
 on:
-  workflow_dispatch:
+  workflow_dispatch
     # inputs:
     #   ref_tag:
     #     description: 'Tag to use for the workflow'
