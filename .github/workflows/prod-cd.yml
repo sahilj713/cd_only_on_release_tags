@@ -10,6 +10,9 @@ jobs:
   check_release:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
       - name: Check if release exists for the tag
         id: check_release
         run: |
