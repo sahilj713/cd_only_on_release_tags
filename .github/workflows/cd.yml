@@ -1,0 +1,30 @@
+name: Manual Tag Trigger Workflow
+
+on:
+  workflow_dispatch
+
+jobs:
+  check_release_job:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get releases
+        id: releases
+        run: |
+          releases=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases")
+          echo "::set-output name=releases::$(echo "$releases" | jq -r '.[].tag_name')"
+        
+      - name: Check if tag exists in releases
+        run: |
+          releases="${{ steps.releases.outputs.releases }}"
+          tag="${{ env.GITHUB_REF_NAME }}"
+          
+          if [[ $releases == *"$tag"* ]]; then
+            echo "Tag exists in releases"
+          else
+            echo "Error: Tag '$tag' doesn't have a release associated with it. Please select a tag from the releases."
+            exit 1
+          fi
