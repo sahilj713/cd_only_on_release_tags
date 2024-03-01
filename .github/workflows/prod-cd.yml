@@ -1,10 +1,10 @@
 name: Check Release Workflow
 on:
   workflow_dispatch:
-    inputs:
-      ref_tag:
-        description: 'Tag to use for the workflow'
-        required: true
+    # inputs:
+    #   ref_tag:
+    #     description: 'Tag to use for the workflow'
+    #     required: true
 
 jobs:
   check_release:
