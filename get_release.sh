@@ -6,6 +6,7 @@ output=$(curl -L -s \
 
 github_tag=$GITHUB_REF_NAME
 
+echo $github_tag
 echo $output
 match=false
 # echo $match
