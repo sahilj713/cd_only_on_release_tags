@@ -15,7 +15,7 @@ jobs:
 
       - name: check for a tag
         run: |
-          if [[ "${{ github.ref }}" == "refs/tags/"* ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/"* ]]; then
           echo "Deployment failure. This is a PROD CD you can only proceed using released tags for successful deployment"
           exit 1
           fi
