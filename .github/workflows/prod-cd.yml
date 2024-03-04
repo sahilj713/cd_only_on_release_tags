@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Run migrations
+        run: sh ./github/scripts/migrate.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
         
       - name: get releases
         run: |
