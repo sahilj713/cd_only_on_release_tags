@@ -6,21 +6,20 @@ on:
 jobs:
   check_release_job:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         
-      - name: Check if release exists for the tag
-        id: check_release
+      - name: get releases
         run: |
-          TAG_NAME="${{ github.event.inputs.ref_tag }}"
-          echo $TAG_NAME
-          RELEASES=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${{ github.repository }}/releases)
-          echo $RELEASES
-          MATCH=$(echo "$RELEASES" | jq -r ".[] | select(.tag_name == \"$TAG_NAME\") | .id")
-          echo $MATCH
-          if [ -z "$MATCH" ]; then
-            echo "Error: No release found for tag $TAG_NAME. Please select a tag from the releases."
-            exit 1
-          fi
+          chmod +x get_release.sh
+          ./get_release.sh
+
+      - name: CD
+        run: |
+          echo "CD is complete"
+
+
