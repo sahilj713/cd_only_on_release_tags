@@ -21,7 +21,7 @@ jobs:
           fi
         
       - name: get releases
-        working-directory: /home/runner/work/cd_only_on_release_tags/.github/workflows
+        working-directory: home/runner/work/cd_only_on_release_tags/.github/workflows
         run: |
         
           ll
