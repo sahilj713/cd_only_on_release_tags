@@ -21,12 +21,9 @@ jobs:
           fi
         
       - name: get releases
-        working-directory: home/runner/work/cd_only_on_release_tags/.github/workflows
+        working-directory: .github/workflows
         run: |
         
-          ll
-          pwd
-          
           chmod +x get_release.sh
           ./get_release.sh
         env:
